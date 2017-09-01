@@ -48,7 +48,7 @@ genSpecMat <- function(comdat_long,
   comdat_long <- comdat_long[c(idcols,
                                grep(spec.colname, colnames(comdat_long)),
                                grep(cover.colname, colnames(comdat_long)))]
-
+  
   # Casting dataset from long to wide
   comdat_wide = spread(comdat_long, spec.colname, cover.colname)
   
