@@ -19,13 +19,7 @@ addplotdata <- function(com.ids, # Community ID output from genspecmat function
   
   if(nrow(com.ids) != nrow(plotdat)){
     print(paste("The following site-plot combinations are mismatched in their number of observations:",
-                     toString(
-                       unlist(
-                          t(obs.com %>% filter(diff != 0))
-                       )
-                       )
-                )
-          )
+                     toString(unlist(t(obs.com %>% filter(diff != 0))))))
   }
   
   ids.merged <- merge(com.ids, plotdat, by = merge.vars)
