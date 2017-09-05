@@ -1,25 +1,27 @@
 
-source("genspecmat.R")
+source("Scripts/genspecmat.R")
+source("Scripts/addplotdata.R")
 library(testthat)
 library(dplyr)
 
-plotdat <- read.csv("comb-by-plot-28-July-2017.csv", stringsAsFactors = F)
-comdat <- read.csv("full-cover-28-July-2017.csv", stringsAsFactors = F)
-biomass <- read.csv("full-biomass-28-July-2017.csv", stringsAsFactors = F)
-envtl <- read.csv("comb-by-plot-clim-soil-diversity-28-Jul-2017.csv", stringsAsFactors = F)
+plotdat <- read.csv("CSVs/comb-by-plot-28-July-2017.csv", stringsAsFactors = F)
+comdat <- read.csv("CSVs/CoastalSitesCorrected_9042017.csv", stringsAsFactors = F)
+biomass <- read.csv("CSVs/full-biomass-28-July-2017.csv", stringsAsFactors = F)
+envtl <- read.csv("CSVs/comb-by-plot-clim-soil-diversity-28-Jul-2017.csv", stringsAsFactors = F)
 
-site_subset <- c("mcla.us", "hopl.us", "sier.us")
+site_subset <- unique(comdat$site_code)
 
-plotdat <- plotdat[plotdat$site_code %in% site_subset,]
+if(!is.null(site_subset)){
+  plotdat <- plotdat[plotdat$site_code %in% site_subset,]
+  comdat <- comdat[comdat$site_code %in% site_subset,]
+  biomass <- biomass[biomass$site_code %in% site_subset,]
+  envtl <- envtl[envtl$site_code%in% site_subset,]
+}
 
-comdat <- comdat[comdat$site_code %in% site_subset,]
-
-biomass <- biomass[biomass$site_code %in% site_subset,]
-
-envtl <- envtl[envtl$site_code%in% site_subset,]
 
 com.ids <- genSpecMat(comdat, idcols = c(1:8))[[1]]
 com.mat <- genSpecMat(comdat, idcols = c(1:8))[[2]]
+
 
 com.ids = addplotdata(com.ids = com.ids,
             plotdat = plotdat,
@@ -36,5 +38,7 @@ com.ids = addplotdata(com.ids = com.ids,
                       grouping.vars = c("site_code", "plot"),
                       merge.vars = c("site_code", "plot", "year", "block"))
 
-write.csv(x = com.mat, "NutNetCommunityMatrix.csv")
-write.csv(x = com.ids, "NutNetCommunityIdentification.csv")
+write.csv(x = com.mat, "CSVs/NutNetCommunityMatrix.csv")
+write.csv(x = com.ids, "CSVs/NutNetCommunityIdentification.csv")
+
+View(com.ids)

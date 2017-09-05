@@ -22,7 +22,7 @@ addplotdata <- function(com.ids, # Community ID output from genspecmat function
                      toString(unlist(t(obs.com %>% filter(diff != 0))))))
   }
   
-  ids.merged <- merge(com.ids, plotdat, by = merge.vars)
+  ids.merged <- merge(com.ids, plotdat, by = merge.vars, all.x = TRUE)
   
   # Removes duplicated column names
   names(ids.merged) <- gsub("\\..", "", names(ids.merged))
@@ -30,5 +30,3 @@ addplotdata <- function(com.ids, # Community ID output from genspecmat function
   
   return(ids.merged)
 }
-
-
